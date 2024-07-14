@@ -1,0 +1,13 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: testpod
+spec:
+  containers:
+    - name: dispatcher
+      image: ubuntu
+      command: ["/bin/bash", "-c", "while true; do echo in-dispatcher-server; sleep 5; done"]
+    - name: adapter
+      image: httpd
+      ports:
+       - containerPort: 80 		# the index.html file is present in /usr/local/apache2/htdocs

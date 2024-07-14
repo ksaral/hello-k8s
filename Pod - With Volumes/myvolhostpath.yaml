@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myvolhostpath
+spec:
+  containers:
+  - image: centos
+    name: testc
+    command: ["/bin/bash", "-c", "sleep 15000"]
+    volumeMounts:
+    - mountPath: /tmp/hostpath
+      name: testvolume
+  volumes:
+  - name: testvolume
+    hostPath:
+      path: /tmp/data   # example of mapping host volume in this way did not work for me. Solution is given below.
+
+      # *************************
+      # Minikube actually creates a VM and then runs your containers on it. So the hostPath actually refers to paths inside that VM and not on your local machine. That is why all mounts show up as empty folders.
+      # Solution:
+  # Map your local path to minikube's VM by same name. That way you can refer it as is in you kubernetes Manifests.
+  # minikube mount <source directory>:<target directory>
+  # In this case:
+  # minikube mount /tmp/data:/tmp/data	  
+  # SOURCE: https://minikube.sigs.k8s.io/docs/handbook/mount/
